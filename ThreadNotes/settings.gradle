@@ -1,0 +1,6 @@
+rootProject.name = 'ThreadNotes'
+
+include 'simpleThread'
+include 'oracleThread'
+include 'java7Concurrency'
+

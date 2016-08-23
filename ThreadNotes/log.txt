@@ -1,0 +1,50 @@
+Main : Id 20:threadName9
+Main : Priority: 1
+Main : Old State: NEW
+Main : New State: RUNNABLE
+Main : ************************************
+Main : Id 19:threadName8
+Main : Priority: 10
+Main : Old State: NEW
+Main : New State: RUNNABLE
+Main : ************************************
+Main : Id 18:threadName7
+Main : Priority: 1
+Main : Old State: NEW
+Main : New State: BLOCKED
+Main : ************************************
+Main : Id 17:threadName6
+Main : Priority: 10
+Main : Old State: NEW
+Main : New State: BLOCKED
+Main : ************************************
+Main : Id 16:threadName5
+Main : Priority: 1
+Main : Old State: NEW
+Main : New State: RUNNABLE
+Main : ************************************
+Main : Id 15:threadName4
+Main : Priority: 10
+Main : Old State: NEW
+Main : New State: RUNNABLE
+Main : ************************************
+Main : Id 14:threadName3
+Main : Priority: 1
+Main : Old State: NEW
+Main : New State: RUNNABLE
+Main : ************************************
+Main : Id 13:threadName2
+Main : Priority: 10
+Main : Old State: NEW
+Main : New State: RUNNABLE
+Main : ************************************
+Main : Id 12:threadName1
+Main : Priority: 1
+Main : Old State: NEW
+Main : New State: RUNNABLE
+Main : ************************************
+Main : Id 11:threadName0
+Main : Priority: 10
+Main : Old State: NEW
+Main : New State: RUNNABLE
+Main : ************************************
