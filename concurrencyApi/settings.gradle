@@ -1,0 +1,13 @@
+rootProject.name = 'concurrencyApi'
+include 'semaphoreDemo'
+include 'ExchangerDemo'
+include 'countDownLatchDemo'
+include 'cyclicBarrierDemo'
+include 'phaserDemo'
+include 'threadPoolExecutor'
+include 'futureAndCallable'
+include 'callableCompletionService'
+include 'executorServiceInvoke'
+include 'scheduleExecutorServiceDemo'
+include 'forkJoinDemo'
+

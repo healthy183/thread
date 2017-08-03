@@ -1,0 +1,5 @@
+dependencies {
+    compile project(':guardedSuspension');
+    compile project(':twoPhaseTermination');
+
+}
