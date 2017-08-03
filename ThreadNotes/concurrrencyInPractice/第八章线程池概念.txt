@@ -1,0 +1,12 @@
+1,严禁在池中线程在同个池中submit callable，除非是核心线程池非常大，
+否则容易导致死锁(资源死锁)
+
+2,线程池饱和四大策略:
+2.1 中止(Abort) RejectException拒绝接收;
+2.2 抛弃(Discard)最新
+2.3 抛弃(Discard)最旧
+2.4 caller-Runs原路返回任务
+
+3,可自定义ThreadFactory创建自定线程，设置线程名称，setUncaughtExceptionHandler捕捉异常
+
+MyAppThread包含统计线程存活数，和创建次数

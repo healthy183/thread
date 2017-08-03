@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicStampedReference;
 /**
  * Created by Administrator on 2016/6/17.
  */
+@Deprecated
 public class NonblockingTemplate {
 
     public static class IntendedModification{

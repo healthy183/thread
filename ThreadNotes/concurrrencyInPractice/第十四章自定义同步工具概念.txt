@@ -1,0 +1,27 @@
+1,wait()和sleep区别
+1.1,wait()会释放锁，然后挂起线程,触发上下文切换,释放cpu资源给其他线程使用,nodify/nodifyAll响应及时(性能更优,阻塞队列都用这个)
+1.2,sleep()睡眠并不释放cpu,并且睡眠时间和业务难以准确符合,往往浪费cpu性能
+
+2.为什么wait()前面一定套个while(condition)?
+while(condition){
+        wait();//1,防止NodifyAll误唤醒当前线程 2,防止没有判断condition导致信号掉失
+}
+
+3,NodifyAll/Nodify异同
+相同点:必须持有锁调用才生效;
+区别:
+Nodify只通知其中一条等待线程; 如果所有等待线程condition不同,nodify单一通知将导致信号掉失;
+NodifyAll通知所有等待线程(性能会略低,但是性能和安全两者必选性能)
+
+
+4,Nodify必须满足
+4.1 "单进单出"
+4.2 唯一"condition"两个条件
+
+
+5,NodifyAll/Nodify和Lock的Signal/SignalAll区别
+单一Lock可以支持多condition,从而使用condition.
+signal可以避免NodifyAll通知所有等待但condition不一样的线程，而且性能更高
+
+
+

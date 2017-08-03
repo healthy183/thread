@@ -1,0 +1,72 @@
+1,非阻塞算法:
+1.1定义:
+一条线程的失败或者挂起不会导致其他线程也失败或者挂去，则为非阻塞算法
+
+1.2非阻塞实例:
+算法用底层的原子机器指令(例如:比较并交换指令)代替锁来确保数据在并发访问中的一致性;
+其被广泛应用与操作系统/jvm实现线程/进程调度机制垃圾回收机制以及锁和其他并发数据结构;
+
+1.3非阻塞定义技巧
+将执行原子修改的范围缩小至单变量
+两线程并发操作，后者线程能帮前者完成操作,然后后者继续操作；
+
+2,非阻塞算法优点:
+2.1 无死锁或者其他活跃性问题;
+2.2 性能和伸缩性都高
+
+3,java应用
+使用AtomicInteger和AtomicReference实现非阻塞算法;
+
+4, volatile优劣
+volatile更轻的同步机制,此类型变量不会发生上下文切换或者线程调度问题;
+但其仅保证可见性，而不是原子性
+
+5,cas算法包含3个步骤:(比较并设置)
+内存V,位于内存V的值A以及待更新的新值B
+仅当V的最新值等于A，才能将B更新到V，否则不执行任何操作;
+不过写入是否成功,都写放回V的原来值;
+
+6,AtomicX类特点
+AtomicX并无像int那样提供包装类,因为包装类都是final而AtomicX不是;
+AtomicX并无重写hashCode和equals,每个实例都不一样,所以他不能像
+其他可变对象一样充当hashMap等哈希容器的键值
+
+7,无锁算法(无状态类/方法)
+某算法每个步骤在任何时候都能被任何线程执行；
+
+8.综合
+算法在仅将CAS用于协调线程之间的操作，并且正确地实现，既是无锁算法，也是非阻塞算法
+
+
+9,非阻塞算法demo
+CasNumberRange 非阻塞实现设值
+ConcurrentStack   非阻塞塞栈
+LinkedQueue 非阻塞队列(包含1.3非阻塞定义技巧)
+
+非阻塞队列(JDK有类似实现 ConcurrentLinkedQueue)
+9.1 使用时注意size()回编列队列,性能极差
+9.2 操作必须为原子性,否则需要同步锁定
+例如
+synchronized(ConcurrentLinkedQueue){
+    if(ConcurrentLinkedQueue.isEmply()){
+        ConcurrentLinkedQueue.poll(..);
+    }
+}
+
+ConcurrentLinkedQueue使用了AtomicReferenceFieldUpdater,
+其原子性稍弱,因为其无法保证底层域不被直接修改;
+其compareAndSet以及其他算法方法只能确保其他使用原子域更新器方法的线程原子性；
+AtomicReferenceFieldUpdater的compareAndSet用于更新Node的next域
+因为像链表next这种频修改而生命周期短暂的对象,去掉创建AtomicReference的过程，能降低插入操作开销;
+
+
+10 ABA问题
+V的值由A变成B，再变回A，那么，你的业务还算他有没有改过？
+如果算法中使用自定方式管理节点对象内存,容易出现此问题;
+
+AtomicStampedReference和AtomicStampedReference通过
+更新一个“对象-引用”二元组,通过在引用加上版本号解决ABA问题
+
+
+
+

@@ -1,0 +1,5 @@
+shutdown
+执行core线程和队列任务
+
+shutdownNow
+core线程打断，队列任务返回

@@ -14,6 +14,7 @@ public class MainRun {
         Thread thead = new Thread(runnableThread);
         thead.start();//new a Thread whitch threadName is 0 to run;
         //thead.start();//IllegalThreadStateException,can not run again!
+        //Thread.sleep(2000);
         thead.run();//just run  through current thread(main);
     }
 }

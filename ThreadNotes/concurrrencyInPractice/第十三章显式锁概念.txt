@@ -1,0 +1,16 @@
+1,ReentrantLock可重入锁
+lock请求锁，失败则一直wait()
+tryLock尝试请求锁，失败则返回
+lockInterruptibly请求锁同时保持可中断响应
+
+比synchronized优势
+定时锁等待
+可以打断
+实现公平性
+非块结构加锁
+
+2,不建议设置公平锁，性能低；
+原因:回复挂起线程和执行此线程间有严重延迟
+
+3.ReentrantReadWirterLock
+性能比ReentrantLock差，在读比写频繁，并且要保证线程安全时建议使用

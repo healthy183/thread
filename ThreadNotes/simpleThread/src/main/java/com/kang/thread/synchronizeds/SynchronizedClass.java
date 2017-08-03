@@ -17,9 +17,9 @@ public class SynchronizedClass {
     }
 
     public void add(int lumpCount,int count){
-        this.count = this.count + count;
+        this.count = this.count + count;//unThreadSafe
         synchronized(this){
-            this.lumpCount = this.lumpCount + lumpCount;
+            this.lumpCount = this.lumpCount + lumpCount;//ThreadSafe
         }
     }
 }
