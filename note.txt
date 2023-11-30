@@ -1,0 +1,3 @@
+concurrencyApi designPattern ThreadNotes三个都是gradle工程，有些奇奇怪怪问题。
+现在新建一个maven工程ThreadNotes2023并将代码搬迁这里。
+

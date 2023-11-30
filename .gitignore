@@ -27,3 +27,6 @@ bin/*
 */.idea/*
 */build/*
 /.gradle
+*/*/build/*
+*.MF
+gradle/

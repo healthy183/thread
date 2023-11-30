@@ -21,13 +21,14 @@ subprojects {
     }
 
     dependencies {
-        testCompile "junit:junit:4.11"
-        testCompile "org.springframework:spring-test:$springVersion"
-        compile "org.projectlombok:lombok:$lombokVersion"
-        compile "ch.qos.logback:logback-classic:$logbackClassicVersion"
-        compile "org.slf4j:slf4j-api:$slf4jVersion"
-        compile "org.slf4j:log4j-over-slf4j:$slf4jVersion"
-        compile "com.google.guava:guava:$guavaVersion"
+        testImplementation "junit:junit:4.11"
+        testImplementation "org.springframework:spring-test:$springVersion"
+        implementation "org.projectlombok:lombok:$lombokVersion"
+        implementation "ch.qos.logback:logback-classic:$logbackClassicVersion"
+        implementation "org.slf4j:slf4j-api:$slf4jVersion"
+        implementation "org.slf4j:log4j-over-slf4j:$slf4jVersion"
+        implementation "com.google.guava:guava:$guavaVersion"
+
     }
 
     configurations {

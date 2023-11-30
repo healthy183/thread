@@ -1,5 +1,5 @@
 dependencies {
-    compile project(':guardedSuspension');
-    compile project(':twoPhaseTermination');
+    implementation project(':guardedSuspension');
+    implementation project(':twoPhaseTermination');
 
 }

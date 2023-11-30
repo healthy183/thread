@@ -1,0 +1,36 @@
+1,所有Thread对象(runnable,callable)不应该调用stop停止线程,
+应该使用interrupt()打断，
+而interrupt()应该封装在Thread对象的自定义方法中,
+例如cancel(){Thread.currentThread().interrupt();}
+2,对不支持取消，仍然可以调用可取消阻塞方法的操作，应该在返回前恢复interrupt状态，
+而不是在捕捉InterruptedException时；
+
+eg:
+public void  run(){
+        Boolean isinterrupt = false;
+         try {
+           while(true){
+             task.get();
+           }
+        } catch (InterruptedException e) {
+            isinterrupt =  true;
+        }finally{
+        if(isinterrupt){
+            Thread.currentThread().interrupt();
+            }
+        }
+}
+
+3,
+3.1 socket io无法interrupt，所以需要根据上面概念1,自定义方法(Thread对象就直接重写interrupt())
+cancel(){
+try {
+  socket.close();
+    }catch (Exception e){
+    }finally{
+     Thread.currentThread().interrupt();
+    }
+}
+3.2 io/nio无法interrupt
+3.2 synchronized同步阻塞期间也无法interrupt,请使用并发包lock的lockInterruptibly()
+
