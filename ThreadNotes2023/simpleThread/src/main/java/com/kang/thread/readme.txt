@@ -4,6 +4,7 @@
    -|atomic:  atom class  http://ifeve.com/java-atomic/
    -|create: the different between extends and implements;
    -|daemon:  daemon thread demo(守护线程)
+   -|interrput: interrput的用法
    -|lock
      -|nestedMonitorLockout 嵌套管程锁死 demo
      -|fairLock : a fail(公平) lock demo
@@ -19,3 +20,5 @@
      -|method: Synchronized method
    -|threadLocal: only own thread can visit the val even if the same threadLocal object;
                   but what the different between threadLocal and volatile?volatile seem unsafe;
+   -|threadMXBean:show how to get threadid through ThreadInfo
+   -threadPool: write a threadPool sample

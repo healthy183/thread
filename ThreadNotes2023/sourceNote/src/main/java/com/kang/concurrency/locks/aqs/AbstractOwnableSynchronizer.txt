@@ -1,0 +1,7 @@
+
+public abstract class AbstractOwnableSynchronizer implements java.io.Serializable {
+    // 当前拥有锁的线程
+    private transient Thread exclusiveOwnerThread;
+}
+
+

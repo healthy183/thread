@@ -1,0 +1,60 @@
+ThreadLocal
+-|  静态内部类 SuppliedThreadLocal    -- 一个全局变量是Supplier的工具类，通过该类设值value的默认值
+-|  静态内部类 ThreadLocalMap   主逻辑类
+  -| 内部类 ThreadLocalMap.Entry extends WeakReference<ThreadLocal<?>>  继承WeakReference
+  
+  
+  // 1，分析set方法，本质上就是把value放进一个map类
+ public void set(T value) {
+        Thread t = Thread.currentThread();
+        ThreadLocalMap map = getMap(t);
+        if (map != null) {
+            map.set(this, value);
+        } else {
+            createMap(t, value);
+        }
+    } 
+
+  // 1.1，分析createMap(t, value)
+ void createMap(Thread t, T firstValue) {
+   // 创建一个ThreadLocalMap对象，并指向当前线程的threadLocals(ThreadLocal.ThreadLocalMap)
+	t.threadLocals = new ThreadLocalMap(this, firstValue); 
+ }
+ 
+ // 1.1.1，分析ThreadLocalMap(Thread,value)构造方法
+  ThreadLocalMap(ThreadLocal<?> firstKey, Object firstValue) {
+            table = new Entry[INITIAL_CAPACITY]; // Entry是ThreadLocalMap内部类，底层是一个数组Entry[]，默认容量16
+            int i = firstKey.threadLocalHashCode & (INITIAL_CAPACITY - 1);  //计算下标
+            table[i] = new Entry(firstKey, firstValue); // 以threadLocal为key，放进数组
+            size = 1;
+            setThreshold(INITIAL_CAPACITY); //负载因子是容量的2/3			
+        }
+		
+  // 2，分析get方法
+    public T get() {
+        Thread t = Thread.currentThread();
+        ThreadLocalMap map = getMap(t); // 拿到线程自己的ThreadLocal.ThreadLocalMap
+        if (map != null) {
+            ThreadLocalMap.Entry e = map.getEntry(this);  // 取出Entry中value然后返回
+            if (e != null) {
+                @SuppressWarnings("unchecked")
+                T result = (T)e.value;
+                return result;
+            }
+        }
+        return setInitialValue(); //跟set一样，只是这个是置value为空
+    }  
+ 
+备注1，ThreadLocal 需要考虑哪些问题？
+如果线程死亡了，那 ThreadLocalMap、ThreadLocal 及独有变量都会被销毁。
+但是现在避免线程的重复创建与销毁，线程使用完都是放回线程池。
+而如果没有手动移除 ThreadLocalMap 的元素，即使当前线程退出，ThreadLocal 已不被线程方法栈持有，也依然无法被回收，从而造成内存泄漏。
+所以 ThreadLocalMap.Entry 的 key（也就是 ThreadLocal）实际是弱引用。
+当没有其他强引用时，只要发生 GC，就会被回收，相当于这个时候 key 为 null。
+
+
+备注2，这又产生了一个问题，key 被回收了， entry 和 value 可还是强引用呢，怎么办？
+ThreadLocalMap 已经考虑了这种情况，在调用 set()、get()、remove() 方法的时候，会清理掉 key 为 null 的记录。
+所以人家设计时没有问题的，如果发生内存泄漏都是用的不对。
+
+总结：建议使用完 ThreadLocal方法后，最好手动调用remove()方法。

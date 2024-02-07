@@ -1,0 +1,110 @@
+ThreadLocal.ThreadLocalMap 这个类是ThreadLocal的内部类，是包私有的。
+key的hashcode是自定义的增长值。 key是WeakReference的。
+
+ThreadLocalMap.Entry  以看到key就是ThreadLocal，肯定不为空，但也是弱引用的。
+也就是说，当key为null时，说明ThreadLocal已经被回收了，对应的Entry就应该被清除了。
+
+// set 方法解读
+ private void set(ThreadLocal<?> key, Object value) {
+        Entry[] tab = table;
+        int len = tab.length;
+        int i = key.threadLocalHashCode & (len-1); // 计算下标
+
+        for (Entry e = tab[i];
+             e != null;  //迭代直到e为空
+             e = tab[i = nextIndex(i, len)]) {
+            if (e.refersTo(key)) { // 如果已经存在直接返回
+                e.value = value;
+                return;
+            }
+            if (e.refersTo(null)) { // 已经清理过则重新存入
+                replaceStaleEntry(key, value, i);
+                return;
+            }
+        }
+        tab[i] = new Entry(key, value);
+        int sz = ++size;
+        if (!cleanSomeSlots(i, sz) && sz >= threshold){
+         // 如果没有清除过时 entry, 并且超过阈值. 则进行先尝试缩小,不行则扩容
+            rehash();
+        }
+    }
+
+    /**
+    replaceStaleEntry() 一是需要清除过时 entry，二是开放定址法要保证所计算出的索引值后面的元素连续性。
+    所以，replaceStaleEntry() 会检查当前可替换位置的前后最近的两个空档之间所有的过时 entry。
+    其次，如果是 key 已存在过时位置的后面，那原有位置替换后会留出空档，需要后面的 entry 都往前挪一位（空档前的）。
+    */
+  private void replaceStaleEntry(ThreadLocal<?> key, Object value,
+                                 int staleSlot) {
+      Entry[] tab = table;
+      int len = tab.length;
+      Entry e;
+      // Back up to check for prior stale entry in current run.
+      // We clean out whole runs at a time to avoid continual
+      // incremental rehashing due to garbage collector freeing
+      // up refs in bunches (i.e., whenever the collector runs).
+      int slotToExpunge = staleSlot;
+     // 1.往前查找第一个空档后的最小过时下标
+      for (int i = prevIndex(staleSlot, len);
+           (e = tab[i]) != null;
+           i = prevIndex(i, len))
+          if (e.refersTo(null))
+              slotToExpunge = i;
+
+      // Find either the key or trailing null slot of run, whichever
+      // occurs first
+      // 2.往后查找第一个空档后的最小过时下标
+      for (int i = nextIndex(staleSlot, len);
+           (e = tab[i]) != null;
+           i = nextIndex(i, len)) {
+          // If we find key, then we need to swap it
+          // with the stale entry to maintain hash table order.
+          // The newly stale slot, or any other stale slot
+          // encountered above it, can then be sent to expungeStaleEntry
+          // to remove or rehash all of the other entries in run.
+          // 找到对应的 entry
+          if (e.refersTo(key)) {
+              e.value = value;
+              // 2.将key 与原位置的过时替换
+              tab[i] = tab[staleSlot];
+              tab[staleSlot] = e;
+
+              // Start expunge at preceding stale entry if it exists
+              // 3.如果前面都没有过时的话,那这个区间的第一个过时就是原来的staleSlot, 现在的 i
+              if (slotToExpunge == staleSlot)
+                  slotToExpunge = i;
+              // 4.清理过时, 挪移 entry
+              cleanSomeSlots(expungeStaleEntry(slotToExpunge), len);
+              return;
+          }
+
+          // If we didn't find stale entry on backward scan, the
+          // first stale entry seen while scanning for key is the
+          // first still present in the run.
+          // 5.如果前面没有空槽, 且有新的过时, 则重新标记第一个过时.
+          // (因为staleSlot一定会被替换成不过时的,到时候就不是第一个过时点了)
+          if (e.refersTo(null) && slotToExpunge == staleSlot)
+              slotToExpunge = i;
+      }
+
+      // If key not found, put new entry in stale slot
+      // 6.直接替换
+      tab[staleSlot].value = null;
+      tab[staleSlot] = new Entry(key, value);
+
+      // If there are any other stale entries in run, expunge them
+      // slotToExpunge == staleSlot, 说明当前区间只有这个过时, 已经被替换了, 所以不需要再进行清除
+      if (slotToExpunge != staleSlot)
+      // key 本不在, 且前或后存在其他的过时
+      // 7.清理过时, 挪移 entry
+          cleanSomeSlots(expungeStaleEntry(slotToExpunge), len);
+  }
+
+更多请看
+https://juejin.cn/post/6931230924549914637
+
+
+
+
+

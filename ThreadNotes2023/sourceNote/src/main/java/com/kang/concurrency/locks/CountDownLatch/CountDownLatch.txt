@@ -1,0 +1,48 @@
+CountDownLatch就是依赖aqs机制，构造方法就是初始化可重入锁个数。
+ this.sync = new Sync(count);
+
+await() 就是请求一次锁，调用 sync.acquireSharedInterruptibly(1)。
+await()
+    CountDownLatch.Sync.acquireSharedInterruptibly(1) // 就是请求一次锁
+        int stat = tryAcquireShared(arg)  // stat是否为0，是的返回1，否则-1
+        //stat小于0则调用以下方法，内部是一个死循环
+        doAcquireSharedInterruptibly(arg);
+            addWaiter(Node.SHARED); // 双向列表中加入一个新note，并返回
+                setHeadAndPropagate(node, r); // 尝试将其放到队列头，然后unpark
+                    //满足N个条件后调用
+                    doReleaseShared();
+                         unparkSuccessor(h); // 将note的线程unpark
+        // 否则以下方法都true则抛出InterruptedException
+        // shouldParkAfterFailedAcquire(p, node)
+        // parkAndCheckInterrupt()
+
+
+
+
+countDown()是释放一次锁。 调用  sync.releaseShared(1);
+
+CountDownLatch.Sync.releaseShared(1);
+     // tryReleaseShared是子类方法，CountDownLatch的实现如下
+    Boolean result = tryReleaseShared(arg);
+       // 如果返回true则调用以下方法,然后返回ture否则返回false
+        doReleaseShared();
+
+
+
+ protected boolean tryReleaseShared(int releases) {
+            // Decrement count; signal when transition to zero
+            for (;;) {
+                int c = getState();
+                if (c == 0)
+                    return false;  // 已经完成不能再通知了，一次性的
+                int nextc = c-1;
+                if (compareAndSetState(c, nextc))
+                    return nextc == 0; // 恰好完成，返回 true，以便进行通知。
+            }
+        }
+
+
+
+
+
+

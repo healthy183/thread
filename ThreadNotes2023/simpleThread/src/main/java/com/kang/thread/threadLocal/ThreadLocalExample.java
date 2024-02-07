@@ -6,8 +6,7 @@ package com.kang.thread.threadLocal;
 public class ThreadLocalExample {
 
     public static class MyRunnable implements Runnable{
-        private ThreadLocal<Integer>  threadLocal
-                = new ThreadLocal<Integer>();
+        private ThreadLocal<Integer>  threadLocal = new ThreadLocal<Integer>();
         @Override
         public void run() {
             Thread thread = Thread.currentThread();

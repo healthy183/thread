@@ -24,7 +24,7 @@ public class ThresholdThread extends  Thread {
     @Override
     public void run(){
         try {
-            log.info("get ready!");
+            log.info("get ready to sleep !");
             Thread.sleep(3000);
             cyclicBarrier.await();
         } catch (InterruptedException  e) {

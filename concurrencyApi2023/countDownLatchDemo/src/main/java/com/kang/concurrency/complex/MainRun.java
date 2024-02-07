@@ -8,7 +8,7 @@ import java.util.concurrent.CountDownLatch;
 
 /**
  * @Title 类名
- * @Description 描述
+ * @Description 描述 CountDownLatch，倒数到0后统一执行线程
  * @Date 2017/1/7.
  * @Author Healthy
  * @Version

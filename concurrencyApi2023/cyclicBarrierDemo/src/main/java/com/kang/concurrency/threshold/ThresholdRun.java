@@ -19,16 +19,14 @@ public class ThresholdRun {
     public static void main(String[] args) {
         int count =  6;
         int threshold = 2;
-        List<ThresholdThread> list  = new ArrayList<ThresholdThread>();
-        CyclicBarrier cyclicBarrier = new CyclicBarrier(threshold, new Runnable() {
-            @Override
-            public void run() {
-                log.info("run!");
-            };
+        List<ThresholdThread> list  = new ArrayList<>();
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(threshold,()->{
+            log.info("run!");
         });
-        CyclicBarrier cyclicBarriers = new CyclicBarrier(count,() -> {
+        /*CyclicBarrier cyclicBarriers = new CyclicBarrier(count,() -> {
                 log.info("run");
-        });
+        });*/
+
         for(int i = 0;i<count;i++){
             ThresholdThread simpleThread = new ThresholdThread(cyclicBarrier);
             list.add(simpleThread);

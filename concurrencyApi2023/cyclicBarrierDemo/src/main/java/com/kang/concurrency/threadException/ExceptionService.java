@@ -29,14 +29,15 @@ public class ExceptionService {
                 //case 2,broken out all the thread,this thread throw InterruptedException,other BrokenBarrierException
                 Thread.currentThread().interrupt();
             }
+            log.info("[{}]  had await() ", Thread.currentThread().getName());
             cyclicBarrier.await();
             //case 3,if over time,broken out all the thread,this thread throw TimeoutException,other BrokenBarrierException
             //cyclicBarrier.await(1, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
-                log.info("InterruptedException [{}] isBroken?[{}]",
+                log.info("InterruptedException! [{}] isBroken?[{}]",
                         Thread.currentThread().getName(),cyclicBarrier.isBroken());
         } catch (BrokenBarrierException e) {
-            log.info("BrokenBarrierException [{}] isBroken?[{}]",
+            log.info("BrokenBarrierException! [{}] isBroken?[{}]",
                     Thread.currentThread().getName(),cyclicBarrier.isBroken());
         } /*catch (TimeoutException e) {
             log.info("TimeoutException [{}] isBroken?[{}]",

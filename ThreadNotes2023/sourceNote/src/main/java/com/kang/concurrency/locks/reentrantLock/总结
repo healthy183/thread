@@ -1,0 +1,6 @@
+公平锁与非公平锁区别
+1，lock()中，非公平锁是直接尝试获取锁，失败再加入队列；公平锁是直接加入队列
+2，tryAcquire(int)中，
+非公平是是调用父类nonfairTryAcquire(int)
+公平锁是调用自己重写的tryAcquire(int)，其中多了一步
+!hasQueuedPredecessors()  --有没有其他线程在等待，没的话再往下执行抢锁；

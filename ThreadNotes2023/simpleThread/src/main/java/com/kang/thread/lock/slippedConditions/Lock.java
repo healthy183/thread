@@ -17,7 +17,6 @@ public class Lock {
             }
             //isLocked = true;//samply move code here will avoid 'slippedConditions'
         }
-
         synchronized (this){ //Slipped conditions
             isLocked = true;
         }

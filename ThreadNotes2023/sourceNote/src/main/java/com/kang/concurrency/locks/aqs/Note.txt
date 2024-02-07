@@ -1,0 +1,66 @@
+ static final class Node  {
+        // 共享note
+        static final Node SHARED = new Node();
+
+        // 排他note
+        static final Node EXCLUSIVE = null;
+
+        // 预设的取消状态. 终结态， 不会再改成其他状态，线程不会阻塞
+        static final int CANCELLED =  1;
+
+        // 表示当前结点的后继结点是 (或即将是) 阻塞的。当前结点释放或取消，唤醒后续结点
+        static final int SIGNAL    = -1;
+
+        // 线程在condition上等待。当结点变成同步队列上的结点时，状态会变成 0
+        static final int CONDITION = -2;
+
+        // 状态传播到下一个节点
+        // 通常设置到调用了doReleaseShared()方法的头节点,确保releaseShared()方法的调用可以传播到其他的所有节点
+        // 简单理解就是共享模式下节点释放的传递标记。
+        static final int PROPAGATE = -3;
+
+        // 初始化0，负值都是特殊情况，表示涉及线程阻塞、唤醒
+        volatile int waitStatus;
+
+        // 双向链表的上一个节点
+        volatile Node prev;
+
+        // 双向链表的下一个节点
+        volatile Node next;
+
+        // 当前note持有的Thread
+        volatile Thread thread;
+
+        // 在condition上等待的下一个节点；
+        // 如果SHARED标识，自然就不存在等待了
+        // 独占模式下nextWaiter为null
+        Node nextWaiter;
+
+        final boolean isShared() {
+            return nextWaiter == SHARED;
+        }
+
+        final Node predecessor() throws NullPointerException {
+            Node p = prev;
+            if (p == null)
+                throw new NullPointerException();
+            else
+                return p;
+        }
+
+        // Used to establish(建立) initial head or SHARED marker
+        Node() {
+        }
+
+        // Used by addWaiter
+        Node(Thread thread, Node mode) {
+            this.nextWaiter = mode;
+            this.thread = thread;
+        }
+
+        // Used by Condition
+        Node(Thread thread, int waitStatus) {
+            this.waitStatus = waitStatus;
+            this.thread = thread;
+        }
+    }

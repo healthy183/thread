@@ -8,7 +8,7 @@ import java.util.concurrent.CyclicBarrier;
 
 /**
  * @Title 类名
- * @Description 描述
+ * @Description 描述 CyclicBarrier等齐人开跑
  * @Date 2017/1/7.
  * @Author Healthy
  * @Version
@@ -18,15 +18,10 @@ public class SimpleRun {
 
     public static void main(String[] args) {
         int count =  5;
-        List<SimpleThread> list  = new ArrayList<SimpleThread>();
-        CyclicBarrier cyclicBarrier = new CyclicBarrier(count, new Runnable() {
-            @Override
-            public void run() {
-                log.info("run!");
-            };
-        });
-        CyclicBarrier cyclicBarriers = new CyclicBarrier(count,() -> {
-                log.info("run");
+        List<SimpleThread> list  = new ArrayList<>();
+        //jdk8 lambda
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(count,() -> {
+                log.info("every one can start!");
         });
         for(int i = 0;i<count;i++){
             SimpleThread simpleThread = new SimpleThread(cyclicBarrier);
@@ -36,7 +31,7 @@ public class SimpleRun {
             simpleThread.start();
             try {
                 Thread.sleep(2000);
-                log.info("{} threads is waitting!",cyclicBarrier.getNumberWaiting());
+                log.info("[{}] threads is waitting!",cyclicBarrier.getNumberWaiting());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

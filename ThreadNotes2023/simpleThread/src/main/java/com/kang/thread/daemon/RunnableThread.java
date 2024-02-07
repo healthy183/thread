@@ -10,9 +10,11 @@ public class RunnableThread implements  Runnable {
     @Override
     public void run() {
          try {
-            Thread.sleep(10000);
-             Thread thread = Thread.currentThread();
-             log.info(thread.getName()+"-"+thread.getId() +" is running!");
+             while(true){
+                 Thread thread = Thread.currentThread();
+                 log.info(thread.getName()+"-"+thread.getId() +" is running!");
+                 Thread.sleep(1000);
+             }
          } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -59,9 +59,6 @@ public class SimpleRun {
             log.info(Throwables.getStackTraceAsString(e));
         }
 
-
-
-
         threadPoolExecutor.shutdown();
     }
 }

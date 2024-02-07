@@ -24,9 +24,10 @@ public class SimpleThread  extends  Thread {
     @Override
     public void run(){
         try {
-            log.info("get ready!");
+            log.info("[{}] get ready!",Thread.currentThread().getName());
             Thread.sleep(3000);
             cyclicBarrier.await();
+            log.info("[{}] is running!",Thread.currentThread().getName());
         } catch (InterruptedException  e) {
             log.info(Throwables.getStackTraceAsString(e));
         } catch (BrokenBarrierException e) {

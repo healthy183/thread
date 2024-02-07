@@ -1,0 +1,31 @@
+readRock.lock();
+ ReentrantReadWriteLock.sync.acquireShared(1); // sync分公平与非公平
+     int i = ReentrantReadWriteLock.sync.tryAcquireShared(1); // i小于0则往下执行doAcquireShared(arg)
+         exclusiveCount(c);   // 不等于0的意思是读写锁被占用
+         sharedCount(c);      // 返回大于0，表示写锁被占用
+         readerShouldBlock(); // 抽象方法，根据是否公平锁而定，公平锁调用AQS的hasQueuedPredecessors判断是否需要等待
+         fullTryAcquireShared(current); // 如果读锁需要排队，或者达到读锁上限或者CAS失败都会进行充分获取锁重试循环
+     AbstractQueuedSynchronizer.doAcquireShared(arg); // AQS方法
+
+readRock.unlock();
+    ReentrantReadWriteLock.sync.releaseShared(1);
+    boolean result = ReentrantReadWriteLock.tryReleaseShared(arg); // true则执行doReleaseShared()
+    AbstractQueuedSynchronizer.doReleaseShared(); // AQS方法
+
+writeLock.lock()
+AbstractQueuedSynchronizer.acquire(1);
+  ReentrantReadWriteLock.sync.tryAcquire(arg)
+  AbstractQueuedSynchronizer.acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
+    AbstractQueuedSynchronizer.selfInterrupt() // tryAcquire失败并且acquireQueued成功则执行
+
+writeLock.unlock()
+ ReentrantReadWriteLock.sync.release(1)
+   boolean result =  tryRelease(arg)  // 释放成功则执行拆链
+    AbstractQueuedSynchronizer.unparkSuccessor(h);
+
+
+
+
+
+
+

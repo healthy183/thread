@@ -23,7 +23,7 @@ public class MainRun {
         countDownLatch.countDown();
         log.info("{}",countDownLatch.getCount());
         countDownLatch.countDown();
-        log.info("{}",countDownLatch.getCount());
+        log.info("{}",countDownLatch.getCount()); // 再减下去也是0
         countDownLatch.countDown();
         log.info("{}",countDownLatch.getCount());
         countDownLatch.countDown();

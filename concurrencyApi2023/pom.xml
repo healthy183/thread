@@ -19,6 +19,7 @@
     <module>scheduleExecutorServiceDemo</module>
     <module>semaphoreDemo</module>
     <module>threadPoolExecutor</module>
+      <module>completableFutureDemo</module>
   </modules>
 
   <name>concurrencyApi2023</name>

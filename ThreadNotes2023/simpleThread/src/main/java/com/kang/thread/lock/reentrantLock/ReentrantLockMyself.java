@@ -1,16 +1,15 @@
 package com.kang.thread.lock.reentrantLock;
 
 /**
- * Created by Administrator on 2016/5/18.
+ *  手写一个可重入锁
  */
-public class ReentrantLock {
+public class ReentrantLockMyself {
     boolean isLocked = false;
     Thread lockBy = null;
     int lockedCount = 0;
 
     public synchronized void lock() throws InterruptedException {
         Thread callinggThread = Thread.currentThread();
-
         while (isLocked && lockBy != callinggThread) {
             wait();
         }

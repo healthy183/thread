@@ -25,26 +25,23 @@ class CountRunnable implements Runnable {
 }
 
 
+@Slf4j
 public class MainRun {
 
     public static void main(String[] args) throws InterruptedException {
-
         Counter counter = new Counter();
-
-        List<Thread> threadList = new ArrayList<Thread>();
-        int forCount = 50000;
+        List<Thread> threadList = new ArrayList<>();
+        int forCount = 5;
         for (int i = 0; i <= forCount; i++) {
             Thread thread = new Thread(new CountRunnable(counter));
             threadList.add(thread);
         }
-
         for (int i = 0; i <= forCount; i++) {
             threadList.get(i).start();
         }
-
         //thread.join();
         //thread.join();
-
-
+        threadList.get(forCount).join();
+        log.info("count:"+counter.getCount());
     }
 }

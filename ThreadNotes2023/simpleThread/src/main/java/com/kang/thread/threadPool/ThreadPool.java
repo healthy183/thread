@@ -11,7 +11,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 public class ThreadPool {
 
     private BlockingQueue taskQueue = null;
-    private List<PoolThread> threads = new ArrayList<PoolThread>();
+    private List<PoolThread> threads = new ArrayList<>();
     private boolean isStopped = false;
 
     public  ThreadPool(int noOfThreads, int maxNoOfTasks){
